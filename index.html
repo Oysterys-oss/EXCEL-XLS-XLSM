@@ -1,9 +1,3 @@
-"""
-Project: XLS-to-XLSM-Batch-Converter
-Author: Custom Automated Script
-Description: A robust recursive batch converter for Excel .xls to macro-enabled .xlsm files.
-"""
-
 import os
 import sys
 import time
@@ -21,7 +15,7 @@ def ultimate_convert_xls_to_xlsm(root_folder):
 
     print(f"🔍 開始掃描資料夾及所有子資料夾: {abs_root}")
     
-    # 遞迴蒐集所有 .xls 檔案
+    # 收集所有符合條件的檔案（支援遞迴）
     target_files = []
     for dirpath, _, filenames in os.walk(abs_root):
         for filename in filenames:
@@ -54,7 +48,7 @@ def ultimate_convert_xls_to_xlsm(root_folder):
         filename = os.path.basename(input_path)
         dir_name = os.path.dirname(input_path)
         
-        # 保持在同一個子資料夾下輸出 .xlsm
+        # 輸出檔名與路徑保持在同一個子資料夾下
         output_filename = os.path.splitext(filename)[0] + ".xlsm"
         output_path = os.path.join(dir_name, output_filename)
 
@@ -64,7 +58,7 @@ def ultimate_convert_xls_to_xlsm(root_folder):
             # 開啟舊檔
             wb = excel.Workbooks.Open(input_path)
             
-            # 另存為 .xlsm (代號 52: xlOpenXMLWorkbookMacroEnabled)
+            # 另存為 .xlsm (代號 52)
             wb.SaveAs(output_path, FileFormat=52)
             wb.Close(False)
             
@@ -89,6 +83,10 @@ def ultimate_convert_xls_to_xlsm(root_folder):
     print(f"❌ 失敗: {fail_count} 個")
 
 if __name__ == "__main__":
-    # 預設掃描當前執行目錄
+    # 預設為執行此腳本所在的資料夾（會自動連同底下的子資料夾一起掃描）
     target_dir = "./"
+    
+    # 如果你想指定特定路徑，可以像下面這樣改寫：
+    # target_dir = r"C:\Users\YourName\Desktop\ExcelWorkspace"
+    
     ultimate_convert_xls_to_xlsm(target_dir)
