@@ -1,4 +1,61 @@
-import os
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XLS to XLSM Batch Converter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f6f8fa;
+        }
+        h1 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+            color: #24292e;
+        }
+        p {
+            color: #586069;
+        }
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, "Andale Mono", monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .btn {
+            background-color: #2ea44f;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .btn:hover {
+            background-color: #2c974b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 XLS to XLSM Batch Converter</h1>
+    <p>一個基於 Python 與 win32com 的自動化工具，用於將舊版 .xls 檔案批次轉換為帶有巨集的 .xlsm 格式。</p>
+
+    <button class="btn" onclick="copyCode()">📋 複製完整程式碼</button>
+
+    <pre><code id="codeBlock">import os
 import sys
 import time
 import win32com.client as win32
@@ -15,11 +72,9 @@ def ultimate_convert_xls_to_xlsm(root_folder):
 
     print(f"🔍 開始掃描資料夾及所有子資料夾: {abs_root}")
     
-    # 收集所有符合條件的檔案（支援遞迴）
     target_files = []
     for dirpath, _, filenames in os.walk(abs_root):
         for filename in filenames:
-            # 排除暫存檔與非 xls 檔
             if filename.lower().endswith(".xls") and not filename.startswith("~$"):
                 full_path = os.path.join(dirpath, filename)
                 target_files.append(full_path)
@@ -31,7 +86,6 @@ def ultimate_convert_xls_to_xlsm(root_folder):
 
     print(f"🎯 總共找到 {total_files} 個 .xls 檔案準備轉換...\n" + "="*50)
 
-    # 啟動 Excel 背景處理
     try:
         excel = win32.Dispatch("Excel.Application")
         excel.Visible = False
@@ -48,17 +102,13 @@ def ultimate_convert_xls_to_xlsm(root_folder):
         filename = os.path.basename(input_path)
         dir_name = os.path.dirname(input_path)
         
-        # 輸出檔名與路徑保持在同一個子資料夾下
         output_filename = os.path.splitext(filename)[0] + ".xlsm"
         output_path = os.path.join(dir_name, output_filename)
 
         print(f"[{idx}/{total_files}] 處理中: {filename}")
         
         try:
-            # 開啟舊檔
             wb = excel.Workbooks.Open(input_path)
-            
-            # 另存為 .xlsm (代號 52)
             wb.SaveAs(output_path, FileFormat=52)
             wb.Close(False)
             
@@ -69,7 +119,6 @@ def ultimate_convert_xls_to_xlsm(root_folder):
             print(f"   └── ❌ 失敗！跳過此檔案。原因: {e}")
             fail_count += 1
 
-    # 關閉 Excel 應用程式
     try:
         excel.Quit()
     except:
@@ -83,10 +132,19 @@ def ultimate_convert_xls_to_xlsm(root_folder):
     print(f"❌ 失敗: {fail_count} 個")
 
 if __name__ == "__main__":
-    # 預設為執行此腳本所在的資料夾（會自動連同底下的子資料夾一起掃描）
     target_dir = "./"
-    
-    # 如果你想指定特定路徑，可以像下面這樣改寫：
-    # target_dir = r"C:\Users\YourName\Desktop\ExcelWorkspace"
-    
     ultimate_convert_xls_to_xlsm(target_dir)
+</code></pre>
+
+    <script>
+        function copyCode() {
+            const codeText = document.getElementById("codeBlock").innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert("已成功複製程式碼！");
+            }).catch(err => {
+                alert("複製失敗: " + err);
+            });
+        }
+    </script>
+</body>
+</html>
