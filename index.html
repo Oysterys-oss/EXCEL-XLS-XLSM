@@ -3,191 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XLS to XLSM Batch Converter</title>
+    <title>XLS to XLSM 線上轉換工具</title>
     <style>
+        :root {
+            --primary-color: #2ea44f;
+            --primary-hover: #2c974b;
+            --bg-color: #f6f8fa;
+            --border-color: #e1e4e8;
+            --text-color: #24292e;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #24292e;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-            background-color: #f6f8fa;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
         }
-        header {
-            border-bottom: 1px solid #eaecef;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
         }
         h1 {
+            font-size: 24px;
+            margin-top: 0;
             color: #0366d6;
-            font-size: 2em;
-            margin-bottom: 10px;
+            text-align: center;
         }
-        p {
+        p.subtitle {
+            text-align: center;
             color: #586069;
+            font-size: 14px;
+            margin-bottom: 30px;
         }
-        .features {
-            background-color: #ffffff;
-            border: 1px solid #e1e4e8;
+        .upload-dropzone {
+            border: 2px dashed #c3cbd2;
             border-radius: 6px;
-            padding: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #fafbfc;
+            transition: background-color 0.2s, border-color 0.2s;
             margin-bottom: 20px;
         }
-        .features h3 {
-            margin-top: 0;
-            color: #24292e;
+        .upload-dropzone:hover {
+            background-color: #f1f8ff;
+            border-color: #0366d6;
         }
-        .features ul {
-            padding-left: 20px;
+        .upload-dropzone p {
+            margin: 10px 0 0 0;
             color: #586069;
+            font-size: 14px;
         }
-        pre {
-            background-color: #1e1e1e;
-            color: #d4d4d4;
-            padding: 20px;
+        .upload-icon {
+            font-size: 40px;
+        }
+        #fileInput {
+            display: none;
+        }
+        .file-list {
+            margin-bottom: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            overflow-x: auto;
-            font-family: Consolas, Monaco, monospace;
+            padding: 10px;
+            background: #fafbfc;
+            display: none;
+        }
+        .file-item {
             font-size: 13px;
-            line-height: 1.5;
+            color: #24292e;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .file-item:last-child {
+            border-bottom: none;
         }
         .btn {
-            background-color: #2ea44f;
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 18px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 16px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+            text-align: center;
         }
         .btn:hover {
-            background-color: #2c974b;
+            background-color: var(--primary-hover);
         }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #6a737d;
-            font-size: 12px;
-            border-top: 1px solid #eaecef;
-            padding-top: 20px;
+        .btn:disabled {
+            background-color: #94d3a2;
+            cursor: not-allowed;
+        }
+        .notice {
+            margin-top: 20px;
+            background-color: #fff8c4;
+            border: 1px solid #ffe58f;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #513a06;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🚀 XLS to XLSM Batch Converter</h1>
-        <p>一個高效、支援遞迴搜尋的自動化 Python 工具，專門將舊版 Excel (.xls) 批次轉換為啟用巨集的活頁簿 (.xlsm)。</p>
-    </header>
+    <div class="container">
+        <h1>📊 XLS to XLSM 轉檔介面</h1>
+        <p class="subtitle">透過前端介面選取您的 Excel 舊版檔案</p>
 
-    <div class="features">
-        <h3>✨ 主要特色</h3>
-        <ul>
-            <li><strong>遞迴資料夾掃描：</strong> 自動深入所有子資料夾，一網打盡所有需要轉換的檔案。</li>
-            <li><strong>完整保留巨集：</strong> 透過微軟官方 Excel 核心 COM 自動化（FileFormat=52），確保 VBA 程式碼與格式 100% 不失真。</li>
-            <li><strong>錯誤防護機制：</strong> 遇到毀損或被佔用的檔案會自動跳過並記錄，不會導致整批工作崩潰。</li>
-        </ul>
+        <!-- 檔案上傳區塊 -->
+        <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <p><strong>點擊此處選擇檔案</strong> 或將 .xls 檔案拖曳至此</p>
+            <input type="file" id="fileInput" accept=".xls" multiple>
+        </div>
+
+        <!-- 選擇後的檔案清單顯示 -->
+        <div id="fileListContainer" class="file-list"></div>
+
+        <!-- 開始轉換按鈕 -->
+        <button id="convertBtn" class="btn" onclick="startConversion()" disabled>開始轉換為 .xlsm</button>
+
+        <!-- 說明提示 -->
+        <div class="notice">
+            <strong>💡 提示：</strong> 目前部署於 GitHub Pages 為純前端靜態介面。如需真正執行 Excel 核心轉檔與保留巨集，請搭配本機執行的 Python 腳本，或將後端部署至支援 Python 的雲端伺服器。
+        </div>
     </div>
 
-    <button class="btn" onclick="copyCode()">📋 複製完整 Python 程式碼</button>
-
-    <pre><code id="codeBlock">import os
-import sys
-import time
-import win32com.client as win32
-
-def ultimate_convert_xls_to_xlsm(root_folder):
-    """
-    遞迴搜尋根資料夾及所有子資料夾中的 .xls 檔案，批次轉換為 .xlsm 格式
-    """
-    abs_root = os.path.abspath(root_folder)
-    
-    if not os.path.exists(abs_root):
-        print(f"❌ 找不到指定的根資料夾: {abs_root}")
-        return
-
-    print(f"🔍 開始掃描資料夾及所有子資料夾: {abs_root}")
-    
-    target_files = []
-    for dirpath, _, filenames in os.walk(abs_root):
-        for filename in filenames:
-            if filename.lower().endswith(".xls") and not filename.startswith("~$"):
-                full_path = os.path.join(dirpath, filename)
-                target_files.append(full_path)
-
-    total_files = len(target_files)
-    if total_files == 0:
-        print("⚠️ 在該資料夾與其子資料夾中找不到任何 .xls 檔案。")
-        return
-
-    print(f"🎯 總共找到 {total_files} 個 .xls 檔案準備轉換...\n" + "="*50)
-
-    try:
-        excel = win32.Dispatch("Excel.Application")
-        excel.Visible = False
-        excel.DisplayAlerts = False
-    except Exception as e:
-        print(f"❌ 無法啟動 Excel 應用程式，請確認是否正確安裝 Office 且 pywin32 正常運作。\n錯誤訊息: {e}")
-        return
-
-    success_count = 0
-    fail_count = 0
-    start_time = time.time()
-
-    for idx, input_path in enumerate(target_files, 1):
-        filename = os.path.basename(input_path)
-        dir_name = os.path.dirname(input_path)
-        
-        output_filename = os.path.splitext(filename)[0] + ".xlsm"
-        output_path = os.path.join(dir_name, output_filename)
-
-        print(f"[{idx}/{total_files}] 處理中: {filename}")
-        
-        try:
-            wb = excel.Workbooks.Open(input_path)
-            wb.SaveAs(output_path, FileFormat=52)
-            wb.Close(False)
-            
-            print(f"   └── 成功 ➔ {output_filename}")
-            success_count += 1
-            
-        except Exception as e:
-            print(f"   └── ❌ 失敗！跳過此檔案。原因: {e}")
-            fail_count += 1
-
-    try:
-        excel.Quit()
-    except:
-        pass
-
-    elapsed_time = time.time() - start_time
-    print("="*50)
-    print(f"🎉 全部作業完成！")
-    print(f"⏱️ 總耗時: {elapsed_time:.2f} 秒")
-    print(f"✅ 成功: {success_count} 個")
-    print(f"❌ 失敗: {fail_count} 個")
-
-if __name__ == "__main__":
-    target_dir = "./"
-    ultimate_convert_xls_to_xlsm(target_dir)
-</code></pre>
-
-    <footer>
-        <p>Powered by GitHub Pages | Designed for Local Automation</p>
-    </footer>
-
     <script>
-        function copyCode() {
-            const codeText = document.getElementById("codeBlock").innerText;
-            navigator.clipboard.writeText(codeText).then(() => {
-                alert("已成功複製 Python 程式碼！");
-            }).catch(err => {
-                alert("複製失敗: " + err);
-            });
+        const fileInput = document.getElementById('fileInput');
+        const fileListContainer = document.getElementById('fileListContainer');
+        const convertBtn = document.getElementById('convertBtn');
+        
+        let selectedFiles = [];
+
+        fileInput.addEventListener('change', function(e) {
+            selectedFiles = Array.from(e.target.files);
+            updateFileList();
+        });
+
+        function updateFileList() {
+            if (selectedFiles.length > 0) {
+                fileListContainer.style.display = 'block';
+                fileListContainer.innerHTML = `<strong>已選取 ${selectedFiles.length} 個檔案：</strong><br>`;
+                selectedFiles.forEach(file => {
+                    fileListContainer.innerHTML += `<div class="file-item">📄 ${file.name}</div>`;
+                });
+                convertBtn.disabled = false;
+            } else {
+                fileListContainer.style.display = 'none';
+                convertBtn.disabled = true;
+            }
+        }
+
+        function startConversion() {
+            if (selectedFiles.length === 0) return;
+            
+            convertBtn.disabled = true;
+            convertBtn.innerText = "⏳ 模擬轉換中（靜態頁面展示）...";
+            
+            setTimeout(() => {
+                alert(`成功取得 ${selectedFiles.length} 個檔案！\n\n[系統提示] GitHub Pages 僅為靜態網頁，若要在本機實際轉出 .xlsm 檔案與保留巨集，請使用我們剛剛寫好的 Python 本機端轉換工具。`);
+                convertBtn.disabled = false;
+                convertBtn.innerText = "開始轉換為 .xlsm";
+            }, 1500);
         }
     </script>
 </body>
