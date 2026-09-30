@@ -8,18 +8,38 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #24292e;
             max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
             background-color: #f6f8fa;
         }
-        h1 {
+        header {
             border-bottom: 1px solid #eaecef;
-            padding-bottom: 0.3em;
-            color: #24292e;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0366d6;
+            font-size: 2em;
+            margin-bottom: 10px;
         }
         p {
+            color: #586069;
+        }
+        .features {
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .features h3 {
+            margin-top: 0;
+            color: #24292e;
+        }
+        .features ul {
+            padding-left: 20px;
             color: #586069;
         }
         pre {
@@ -28,32 +48,52 @@
             padding: 20px;
             border-radius: 6px;
             overflow-x: auto;
-            font-family: Consolas, Monaco, "Andale Mono", monospace;
-            font-size: 14px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
             line-height: 1.5;
         }
         .btn {
             background-color: #2ea44f;
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 10px 18px;
             font-size: 14px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .btn:hover {
             background-color: #2c974b;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6a737d;
+            font-size: 12px;
+            border-top: 1px solid #eaecef;
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <h1>🚀 XLS to XLSM Batch Converter</h1>
-    <p>一個基於 Python 與 win32com 的自動化工具，用於將舊版 .xls 檔案批次轉換為帶有巨集的 .xlsm 格式。</p>
+    <header>
+        <h1>🚀 XLS to XLSM Batch Converter</h1>
+        <p>一個高效、支援遞迴搜尋的自動化 Python 工具，專門將舊版 Excel (.xls) 批次轉換為啟用巨集的活頁簿 (.xlsm)。</p>
+    </header>
 
-    <button class="btn" onclick="copyCode()">📋 複製完整程式碼</button>
+    <div class="features">
+        <h3>✨ 主要特色</h3>
+        <ul>
+            <li><strong>遞迴資料夾掃描：</strong> 自動深入所有子資料夾，一網打盡所有需要轉換的檔案。</li>
+            <li><strong>完整保留巨集：</strong> 透過微軟官方 Excel 核心 COM 自動化（FileFormat=52），確保 VBA 程式碼與格式 100% 不失真。</li>
+            <li><strong>錯誤防護機制：</strong> 遇到毀損或被佔用的檔案會自動跳過並記錄，不會導致整批工作崩潰。</li>
+        </ul>
+    </div>
+
+    <button class="btn" onclick="copyCode()">📋 複製完整 Python 程式碼</button>
 
     <pre><code id="codeBlock">import os
 import sys
@@ -136,11 +176,15 @@ if __name__ == "__main__":
     ultimate_convert_xls_to_xlsm(target_dir)
 </code></pre>
 
+    <footer>
+        <p>Powered by GitHub Pages | Designed for Local Automation</p>
+    </footer>
+
     <script>
         function copyCode() {
             const codeText = document.getElementById("codeBlock").innerText;
             navigator.clipboard.writeText(codeText).then(() => {
-                alert("已成功複製程式碼！");
+                alert("已成功複製 Python 程式碼！");
             }).catch(err => {
                 alert("複製失敗: " + err);
             });
